@@ -7,7 +7,7 @@
 /*************** PARAMETRY ZEWNÊTRZNE ***************/
 
 // Miary wektorów
-nbMachine = 5;
+nbMachines = 5;
 nbMonths = 3;
 nbProducts = 4;
 
@@ -35,7 +35,7 @@ storageMax = [200 200 200 200];
 storageCost = 1;
 
 // Liczba godzin w miesi¹cu - 24 dni robocze po 2 zmiany po 8 godzin = 24 * 16 = 384
-nbHours = 384
+nbHours = 384;
 
 // MI-vector
 mi = [9 8 7 6];
