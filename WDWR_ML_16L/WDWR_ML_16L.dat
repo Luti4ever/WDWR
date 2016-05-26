@@ -1,0 +1,34 @@
+/*********************************************
+ * OPL  Data
+ * Author: Micha³ Lutoborski
+ * Creation Date: 26-05-2016 at 19:41:49
+ *********************************************/
+
+/*************** PARAMETRY ZEWNÊTRZNE ***************/
+
+// Miary wektorów
+NbMachine = 5;
+NbMonths = 3;
+NbProducts = 4;
+
+// Liczba maszyn
+MaxMachines = [4 2 3 1 1];
+
+// Koszty wykorzystania maszyn w produkcji
+ProdCost = [[ 0.4   0.6    0         0]
+			[ 0.2   0.1    0       0.6]
+			[ 0.1   0      0.7       0]
+			[ 0.06  0.04   0      0.05]
+			[ 0     0.05   0.02      0]];
+			
+// Zapotrzebowanie w miesi¹cach
+MonthMax = [[ 400     0   200   300]
+			[ 700   400   500     0]
+			[   0   800   600   400]];
+
+// Limit magazynów
+StorageMax = [200 200 200 200];
+
+// Liczba godzin w miesi¹cu - 24 dni robocze po 2 zmiany po 8 godzin = 24 * 16 = 384
+NbHours = 384
+
