@@ -7,28 +7,38 @@
 /*************** PARAMETRY ZEWNÊTRZNE ***************/
 
 // Miary wektorów
-NbMachine = 5;
-NbMonths = 3;
-NbProducts = 4;
+nbMachine = 5;
+nbMonths = 3;
+nbProducts = 4;
 
 // Liczba maszyn
-MaxMachines = [4 2 3 1 1];
+maxMachines = [4 2 3 1 1];
 
 // Koszty wykorzystania maszyn w produkcji
-ProdCost = [[ 0.4   0.6    0         0]
+prodCost = [[ 0.4   0.6    0         0]
 			[ 0.2   0.1    0       0.6]
 			[ 0.1   0      0.7       0]
 			[ 0.06  0.04   0      0.05]
 			[ 0     0.05   0.02      0]];
 			
 // Zapotrzebowanie w miesi¹cach
-MonthMax = [[ 400     0   200   300]
+monthMax = [[ 400     0   200   300]
 			[ 700   400   500     0]
 			[   0   800   600   400]];
 
-// Limit magazynów
-StorageMax = [200 200 200 200];
+// Magazyny - limit i koszt/sztuka
+storageMax = [200 200 200 200];
+storageCost = 1;
 
 // Liczba godzin w miesi¹cu - 24 dni robocze po 2 zmiany po 8 godzin = 24 * 16 = 384
-NbHours = 384
+nbHours = 384
 
+// MI-vector
+mi = [9 8 7 6];
+
+// Macierz kowariancji
+covariance = [[ 16  -2  -1  -3]
+			  [ -2   9  -4  -1]
+			  [ -1  -4   4   1]
+			  [ -3  -1   1   1]];
+			  
