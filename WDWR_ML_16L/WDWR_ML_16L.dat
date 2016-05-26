@@ -11,6 +11,10 @@ nbMachine = 5;
 nbMonths = 3;
 nbProducts = 4;
 
+// Rozk³ad
+distrColNb = 4;
+distrRowNb = 1000; // Liczba próbek wygenerowanych - na koniec
+
 // Liczba maszyn
 maxMachines = [4 2 3 1 1];
 
