@@ -37,69 +37,77 @@ int covariance[distrCol][distrCol] = ...;
 dvar int producedQuant[months][products]; 	// Liczba wyprodukowanych
 dvar int soldQuant[months][products];		// Liczba sprzedanych
 dvar int stockQuant[months][products];		// Liczba w magazynie
+dvar float elapsedTime[machines][products];	// Czas wykorzystany na maszynach na dane produkty
 dvar boolean production[machines][products];// Zmienne steruj¹ce jednoczesn¹ prac¹ maszyn
 
+// Kryteria
+	/* Ogólne wzory do implementacji jak pojawi siê wektor losowy - tak na pierwszy rzut oka
+	Profit: sum(m in months, p in products) soldQuant[m][p]*price[p] - storedQuant[p]*storageCost
+	Risk:	mi = sum(scenarios)/nbScenarios
+			forall(t in scenarios) max( abs(mi-t));
+	*/
+
+// Ograniczenia
+subject to {
+  // Produkcja
+	forall(mc in machines) {
+	  production[mc][1]+production[mc][2]+production[mc][3]+production[mc][4] <= maxMachines[mc];
+  }
+ 	
+ 	forall(p in products, mc in machines) {
+ 	  elapsedTime[mc][p] == sum(mc in machines) prodCost[mc][p]*production[mc][p];
+  }
+  	
+  	forall() 	  
+  
+}  
+	
+
+/***************** COPY *****************/
+
+// Boundries 
+subject to {
+  	// client
+  	amtK1_F1 >=0;
+  	amtK1_F1 <= uK1_F1 * maxF1;
+  	amtK1_F2 >=0;
+  	amtK1_F2 <= uK1_F2 * maxF2;
+  	amtK1_M2 >=0;
+  	amtK1_M2 <= uK1_M2 * maxM2;
+  	amtK2_F1 >=0;
+  	amtK2_F1 <= uK2_F1 * maxF1;
+  	amtK2_M1 >=0;
+  	amtK2_M1 <= uK2_M1 * maxM1;
+  	amtK2_M2 >=0;
+  	amtK2_M2 <= uK2_M2 * maxM2;
+  	
+   	amtK1_F1 + amtK1_F2 + amtK1_M2 == 130;
+  	amtK2_F1 + amtK2_M1 + amtK2_M2 == 90;
+  	
+  	
+  	// factory
+  	amtK1_F1 + amtK2_F1 + amtK2_M1 <= 150;
+  	amtK1_F2 + amtK1_M2 + amtK2_M2 <= 200;
+  	
+  	// magazine
+  	amtK2_M1 <= 110;
+  	amtK1_M2 + amtK2_M2 <= 150;
+  	
+  	// Us  	
+  	uK1_F1 + uK1_F2 + uK1_M2 <= 2;
+  	uK2_F1 + uK2_M1 + uK2_M2 <= 2;
+  	
+  	// MPO
+  	v <= MPOac;
+  	v <= MPOwr;
+  	
+	MPOac <= uMPO * lmbAvgCost * (asAvgCost - avgCost);
+    MPOac <= uMPO * beta * lmbAvgCost * (asAvgCost - avgCost);
+    
+	MPOwr <= uMPO * lmbWhlRisk * (asWhlRisk - whlRisk);
+	MPOwr <= uMPO * beta * lmbWhlRisk * (asWhlRisk - whlRisk);
+};
 
 
 
-
-
-
- /***************** COPY *****************/
-
- // Data reading
-int nrows = ...;
-int ncols = ...;
-
-{int} rows = asSet(1..nrows);
-{int} cols = asSet(1..ncols);
-
-// Values
-float costF1_M1 = ...;
-float costF2_M2 = ...;
-//float mi[cols] = ...;
-float covr[cols][cols] = ... ;
-int maxF1 = ...;
-int maxF2 = ...;
-int maxM1 = ...;
-int maxM2 = ...;
-int needK1 = ...;
-int needK2 = ...;
-float vecR[rows][cols] = ...;
-
-// MPO
-int uuAC = ...;
-int unAC = ...;
-int uuWR = ...;
-int unWR = ...;
-int uMPO = ...;
-int uASP = ...;
-float utWhlRisk = ...;
-float ndWhlRisk = ...;
-float lmbWhlRisk = 1/(ndWhlRisk-utWhlRisk);
-float utAvgCost = ...;
-float ndAvgCost = ...;
-float lmbAvgCost = 1/(ndAvgCost-utAvgCost);
-float beta = ...;
-float epsilon = ...;
-float asWhlRisk = ...;
-float asAvgCost = ...;
-
-// Variables
-dvar int amtK1_F1;
-dvar int amtK1_F2;
-dvar int amtK1_M2;
-dvar int amtK2_F1;
-dvar int amtK2_M1;
-dvar int amtK2_M2;
-dvar boolean uK1_F1;
-dvar boolean uK1_F2;
-dvar boolean uK1_M2;
-dvar boolean uK2_F1;
-dvar boolean uK2_M1;
-dvar boolean uK2_M2;
-
-// MPO
-dvar float v;
-dvar float MPOac;
-dvar float MPOwr;
+ 
