@@ -17,6 +17,7 @@ int distrRowNb = ...; // Liczba próbek wygenerowanych - na koniec
 {int} months = asSet(1..nbMonths);
 {int} products = asSet(1..nbProducts);
 {int} distrCol = asSet(1..distrColNb);
+{int} distrRow = asSet(1..distrRowNb);
 
 int maxMachines[machines] = ...;
 
@@ -33,7 +34,7 @@ int mi[distrCol] = ...;
 
 int covariance[distrCol][distrCol] = ...;
 
-float sellProfitR[distrCol][distrCol] = ...;
+float sellProfitR[distrRow][distrCol] = ...;
 
 // Zmienne decyzyjne
 dvar int producedQuant[months][products]; 	// Liczba wyprodukowanych
