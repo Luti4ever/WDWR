@@ -29,7 +29,7 @@ int storageCost = ...;
 
 int nbHours = ...;
 
-int mi = ...;
+int mi[distrCol] = ...;
 
 int covariance[distrCol][distrCol] = ...;
 
@@ -43,11 +43,16 @@ dvar float elapsedTime[months][machines][products];	// Czas wykorzystany na masz
 dvar boolean production[machines][products];// Zmienne steruj¹ce jednoczesn¹ prac¹ maszyn
 
 // Kryteria
+dexpr float profit = sum(m in months, p in products) (soldQuant[m][p]*sellProfitR[1][p] - stockQuant[m][p]*storageCost);
+
 	/* Ogólne wzory do implementacji jak pojawi siê wektor losowy - tak na pierwszy rzut oka
 	Profit: sum(m in months, p in products) soldQuant[m][p]*price[p] - storedQuant[p]*storageCost
 	Risk:	mi = sum(scenarios)/nbScenarios
 			forall(t in scenarios) max( abs(mi-t));
 	*/
+
+// Funkcja celu
+maximize profit;
 
 // Ograniczenia
 subject to {
@@ -90,53 +95,3 @@ subject to {
     }  	  	
    }
 }  
-	
-
-/***************** COPY *****************/
-
-// Boundries 
-subject to {
-  	// client
-  	amtK1_F1 >=0;
-  	amtK1_F1 <= uK1_F1 * maxF1;
-  	amtK1_F2 >=0;
-  	amtK1_F2 <= uK1_F2 * maxF2;
-  	amtK1_M2 >=0;
-  	amtK1_M2 <= uK1_M2 * maxM2;
-  	amtK2_F1 >=0;
-  	amtK2_F1 <= uK2_F1 * maxF1;
-  	amtK2_M1 >=0;
-  	amtK2_M1 <= uK2_M1 * maxM1;
-  	amtK2_M2 >=0;
-  	amtK2_M2 <= uK2_M2 * maxM2;
-  	
-   	amtK1_F1 + amtK1_F2 + amtK1_M2 == 130;
-  	amtK2_F1 + amtK2_M1 + amtK2_M2 == 90;
-  	
-  	
-  	// factory
-  	amtK1_F1 + amtK2_F1 + amtK2_M1 <= 150;
-  	amtK1_F2 + amtK1_M2 + amtK2_M2 <= 200;
-  	
-  	// magazine
-  	amtK2_M1 <= 110;
-  	amtK1_M2 + amtK2_M2 <= 150;
-  	
-  	// Us  	
-  	uK1_F1 + uK1_F2 + uK1_M2 <= 2;
-  	uK2_F1 + uK2_M1 + uK2_M2 <= 2;
-  	
-  	// MPO
-  	v <= MPOac;
-  	v <= MPOwr;
-  	
-	MPOac <= uMPO * lmbAvgCost * (asAvgCost - avgCost);
-    MPOac <= uMPO * beta * lmbAvgCost * (asAvgCost - avgCost);
-    
-	MPOwr <= uMPO * lmbWhlRisk * (asWhlRisk - whlRisk);
-	MPOwr <= uMPO * beta * lmbWhlRisk * (asWhlRisk - whlRisk);
-};
-
-
-
- 
