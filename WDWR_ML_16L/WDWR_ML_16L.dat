@@ -13,7 +13,7 @@ nbProducts = 4;
 
 // Rozk³ad
 distrColNb = 4;
-distrRowNb = 1000; // Liczba próbek wygenerowanych - na koniec
+distrRowNb = 1; // Liczba próbek wygenerowanych - na koniec (docelowo - 1000)
 
 // Liczba maszyn
 maxMachines = [4 2 3 1 1];
@@ -45,4 +45,6 @@ covariance = [[ 16  -2  -1  -3]
 			  [ -2   9  -4  -1]
 			  [ -1  -4   4   1]
 			  [ -3  -1   1   1]];
-			  
+	
+// Scenariusze (rozk³ad losowy do implementacji)		  
+sellProfitR = [10 8 9 6];

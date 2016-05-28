@@ -33,11 +33,13 @@ int mi = ...;
 
 int covariance[distrCol][distrCol] = ...;
 
+float sellProfitR[distrCol][distrCol] = ...;
+
 // Zmienne decyzyjne
 dvar int producedQuant[months][products]; 	// Liczba wyprodukowanych
 dvar int soldQuant[months][products];		// Liczba sprzedanych
 dvar int stockQuant[months][products];		// Liczba w magazynie
-dvar float elapsedTime[machines][products];	// Czas wykorzystany na maszynach na dane produkty
+dvar float elapsedTime[months][machines][products];	// Czas wykorzystany na maszynach na dane produkty
 dvar boolean production[machines][products];// Zmienne steruj¹ce jednoczesn¹ prac¹ maszyn
 
 // Kryteria
@@ -51,15 +53,42 @@ dvar boolean production[machines][products];// Zmienne steruj¹ce jednoczesn¹ pra
 subject to {
   // Produkcja
 	forall(mc in machines) {
-	  production[mc][1]+production[mc][2]+production[mc][3]+production[mc][4] <= maxMachines[mc];
+	  sum(p in products) production[mc][p] <= maxMachines[mc];
+	  //production[mc][1]+production[mc][2]+production[mc][3]+production[mc][4] <= maxMachines[mc];
+  }
+   	
+ 	forall(m in months, p in products, mc in machines) {
+ 	  producedQuant[m][p]*prodCost[mc][p]*production[mc][p] == elapsedTime[m][mc][p];
+  }
+  
+  	forall(m in months) {
+ 	  sum(p in products) (
+ 	  	sum(mc in machines) (
+ 	  		elapsedTime[m][mc][p]
+ 	  		)
+ 	  	) <= nbHours;
   }
  	
- 	forall(p in products, mc in machines) {
- 	  elapsedTime[mc][p] == sum(mc in machines) prodCost[mc][p]*production[mc][p];
+  // Rynek
+ 	forall(m in months, p in products) {
+ 	  soldQuant[m][p] <= monthMax[m][p];
   }
   	
-  	forall() 	  
+  	forall(m in months, p in products) {
+ 	  producedQuant[m][p] + stockQuant[m][p] == soldQuant[m][p];
+  }
   
+  	forall(m in months) {
+  	  soldQuant[m][1]*soldQuant[m][4] >= 1 || soldQuant[m][2]*soldQuant[m][4] >= 1;
+   }  	    	    
+  
+  // Sk³ad
+  	forall(m in months, p in products) {
+  	  stockQuant[m][p] <= storageMax[p];
+  	  if(m == 3) {
+  	  	stockQuant[m][p] >= 50;
+    }  	  	
+   }
 }  
 	
 
