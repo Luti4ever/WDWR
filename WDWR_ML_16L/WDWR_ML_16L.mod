@@ -41,7 +41,6 @@ dvar int producedQuant[months][products]; 	// Liczba wyprodukowanych
 dvar int soldQuant[months][products];		// Liczba sprzedanych
 dvar int stockQuant[months][products];		// Liczba w magazynie
 dvar float elapsedTime[months][machines][products];	// Czas wykorzystany na maszynach na dane produkty
-dvar boolean production[machines][products];// Zmienne steruj¹ce jednoczesn¹ prac¹ maszyn
 
 // Kryteria
 dexpr float profit = sum(m in months, p in products) (soldQuant[m][p]*sellProfitR[1][p] - stockQuant[m][p]*storageCost);
@@ -66,16 +65,15 @@ subject to {
     soldQuant[m][p] >= 0;
     stockQuant[m][p] >= 0;
   }    
-  /*
+  
   // Produkcja
   
-	forall(mc in machines) {
-	  sum(p in products) production[mc][p] <= maxMachines[mc];
-	  //production[mc][1]+production[mc][2]+production[mc][3]+production[mc][4] <= maxMachines[mc];
+	forall(m in months, mc in machines) {
+	  sum(p in products) (elapsedTime[m][mc][p]) <= maxMachines[mc]*nbHours;
   }
-   	*/
+   	
  	forall(m in months, p in products, mc in machines) {
- 	  elapsedTime[m][mc][p] == producedQuant[m][p]*prodCost[mc][p];//*production[mc][p];
+ 	  elapsedTime[m][mc][p] == producedQuant[m][p]*prodCost[mc][p];
   }
   
   	forall(m in months, mc in products, p in products) {
@@ -88,12 +86,22 @@ subject to {
   }
   	
   	forall(m in months, p in products) {
- 	  soldQuant[m][p] == producedQuant[m][p]; //+ stockQuant[m][p];
+  	  if(m == 1) {
+  	    soldQuant[m][p] == producedQuant[m][p];
+     }
+     else {
+       soldQuant[m][p] == producedQuant[m][p] + stockQuant[m-1][p];
+     }
   }
   
-  /*
+    /* Warunek sprzedawania produktów P4 w miesi¹cach w których sprzedawany jest P1 lub P2 mo¿na rozumieæ dwojako.
+    Je¿eli mamy sprzedawaæ P4 jednoczeœnie z produktem P1 lub P2, to warunek jest prosty: suma sprzedanych P1 i P2 w danym miesi¹cu
+    musi byæ równa sprzedanej P4. - warunek jest aktualnie zakodowany w skrypcie poni¿ej tego komentarza, przetestowany i dzia³a.
+    W przypadku gdy iloœci nie musz¹ siê pokrywaæ problem jest do rozwi¹zania.
+    Wprowadziæ poprawkê po konsultacjach z prowadz¹cym.
+    
   	forall(m in months) {
-  	  soldQuant[m][1]*soldQuant[m][4] >= 1; // || soldQuant[m][2]*soldQuant[m][4] >= 1;
+  	  soldQuant[m][1] + soldQuant[m][2] == soldQuant[m][4];
    }  	    	    
   */
   // Sk³ad
