@@ -57,37 +57,45 @@ maximize profit;
 
 // Ograniczenia
 subject to {
+  
+  
+  // Wiêksze ni¿ 0
+  forall(m in months, mc in machines, p in products) {
+    elapsedTime[m][mc][p] >= 0;
+    producedQuant[m][p] >= 0;
+    soldQuant[m][p] >= 0;
+    stockQuant[m][p] >= 0;
+  }    
+  /*
   // Produkcja
+  
 	forall(mc in machines) {
 	  sum(p in products) production[mc][p] <= maxMachines[mc];
 	  //production[mc][1]+production[mc][2]+production[mc][3]+production[mc][4] <= maxMachines[mc];
   }
-   	
+   	*/
  	forall(m in months, p in products, mc in machines) {
- 	  producedQuant[m][p]*prodCost[mc][p]*production[mc][p] == elapsedTime[m][mc][p];
+ 	  elapsedTime[m][mc][p] == producedQuant[m][p]*prodCost[mc][p];//*production[mc][p];
   }
   
-  	forall(m in months) {
- 	  sum(p in products) (
- 	  	sum(mc in machines) (
- 	  		elapsedTime[m][mc][p]
- 	  		)
- 	  	) <= nbHours;
+  	forall(m in months, mc in products, p in products) {
+ 	  elapsedTime[m][mc][p] <= nbHours;
   }
- 	
+	
   // Rynek
  	forall(m in months, p in products) {
  	  soldQuant[m][p] <= monthMax[m][p];
   }
   	
   	forall(m in months, p in products) {
- 	  producedQuant[m][p] + stockQuant[m][p] == soldQuant[m][p];
+ 	  soldQuant[m][p] == producedQuant[m][p]; //+ stockQuant[m][p];
   }
   
+  /*
   	forall(m in months) {
-  	  soldQuant[m][1]*soldQuant[m][4] >= 1 || soldQuant[m][2]*soldQuant[m][4] >= 1;
+  	  soldQuant[m][1]*soldQuant[m][4] >= 1; // || soldQuant[m][2]*soldQuant[m][4] >= 1;
    }  	    	    
-  
+  */
   // Sk³ad
   	forall(m in months, p in products) {
   	  stockQuant[m][p] <= storageMax[p];
@@ -95,4 +103,43 @@ subject to {
   	  	stockQuant[m][p] >= 50;
     }  	  	
    }
-}  
+  
+}
+
+/*
+main {
+  /*
+    var fileWyniki = new IloOplOutputFile();
+	fileWyniki.open("wyniki.csv");
+
+    var fileKosztyPerScenariusz = new IloOplOutputFile();
+    fileKosztyPerScenariusz.open("KosztyPerScenariusz.csv");
+*/
+  	///////////////////////////////////////////////////////////////////////////////////////
+  	// wyznaczenie utopii i nadiru
+  	///////////////////////////////////////////////////////////////////////////////////////
+/*
+	var configMinKoszt = new IloOplRunConfiguration(
+			"utopia_Koszt.mod",
+			"parametry_zadania.dat",
+			"scenariusze.dat");
+	/*		
+ 	var modelMinKoszt = new IloOplModel (configMinKoszt.oplModel.modelDefinition, cplex);
+ 	modelMinKoszt.addDataSource(configMinKoszt.oplModel.dataElements)
+
+	
+ 	//configMinKoszt.oplModel;
+  	
+  	var testConfig = new IloOplRunConfiguration(
+			"WDWR_ML_16L.mod",
+			"WDWR_ML_16L.dat");
+			
+  	var testModel = new IloOplModel (testConfig.oplModel.modelDefinition, cplex);
+  	testModel.addDataSource(testConfig.oplModel.dataElements);
+  	
+   	testConfig.oplModel;
+   	testModel.generate();
+  	cplex.solve();
+}
+
+*/
