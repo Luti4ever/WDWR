@@ -10,7 +10,7 @@ int nbMonths = ...;
 int nbProducts = ...;
 
 int distrColNb = ...;
-int distrRowNb = ...; // Liczba próbek wygenerowanych - na koniec
+int distrRowNb = ...;
 
 // Utworzenie wektorów do indeksowania
 {int} machines = asSet(1..nbMachines);
@@ -43,16 +43,14 @@ dvar int stockQuant[months][products];		// Liczba w magazynie
 dvar float elapsedTime[months][machines][products];	// Czas wykorzystany na maszynach na dane produkty
 
 // Kryteria
-dexpr float profit = sum(m in months, p in products) (soldQuant[m][p]*sellProfitR[1][p] - stockQuant[m][p]*storageCost);
+dexpr float profit[i in distrRow] = sum(m in months, p in products) (soldQuant[m][p]*sellProfitR[i][p] - stockQuant[m][p]*storageCost);
+dexpr float avgProfit = sum(i in distrRow)(profit[i])/distrRowNb;
 
-	/* Ogólne wzory do implementacji jak pojawi siê wektor losowy - tak na pierwszy rzut oka
-	Profit: sum(m in months, p in products) soldQuant[m][p]*price[p] - storedQuant[p]*storageCost
-	Risk:	mi = sum(scenarios)/nbScenarios
-			forall(t in scenarios) max( abs(mi-t));
-	*/
+dexpr float risk[i in distrRow] = abs(avgProfit-profit[i]);
+dexpr float maxRisk = max(i in distrRow) risk[i];
 
 // Funkcja celu
-maximize profit;
+maximize avgProfit - maxRisk;
 
 // Ograniczenia
 subject to {
