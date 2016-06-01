@@ -38,11 +38,11 @@ storageCost = 1;
 nbHours = 384;
 
 /***************************** MPO *****************************/
-asAvgProfit = 15000;       	// step of 15
+asAvgProfit = 20000;    // step of 808
 utAvgProfit = 19347;
 ndAvgProfit = -200;
 
-asMaxRisk = 500;         	// step of 5
+asMaxRisk = 0;         	// step of 320
 utMaxRisk = 0;
 ndMaxRisk = 4752.5;
 
