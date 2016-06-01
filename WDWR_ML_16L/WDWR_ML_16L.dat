@@ -4,7 +4,12 @@
  * Creation Date: 26-05-2016 at 19:41:49
  *********************************************/
 
+
 /*************** PARAMETRY ZEWNÊTRZNE ***************/
+
+// Zmienne steruj¹ca
+calMPO = 1;
+calFSD = 1;
 
 // Miary wektorów
 nbMachines = 5;
@@ -38,13 +43,13 @@ storageCost = 1;
 nbHours = 384;
 
 /***************************** MPO *****************************/
-asAvgProfit = 20000;    // step of 808
-utAvgProfit = 19347;
-ndAvgProfit = -200;
+asAvgProfit = 19500;    // step of 2095
+utAvgProfit = 19399;
+ndAvgProfit = -1450;
 
-asMaxRisk = 0;         	// step of 320
+asMaxRisk = 0;         	// step of 636.58
 utMaxRisk = 0;
-ndMaxRisk = 4752.5;
+ndMaxRisk = 6365.8;
 
 beta = 0.0001;
 epsilon = 0.00005;
